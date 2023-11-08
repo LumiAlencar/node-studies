@@ -1,12 +1,10 @@
 const express = require('express');
+const cors = require('cors')
 const app = express();
 const data = require('./data.json');
 
 app.use(express.json())
-
-app.get("/clients", function(req, res) {
-    res.json(data);
-});
+app.use(cors())
 
 app.get("/clients/:id", function(req, res) {
     const { id } = req.params;
@@ -17,11 +15,14 @@ app.get("/clients/:id", function(req, res) {
     res.json(client);
 });
 
-app.post("/clients", function(req, res) {
-    const { name, email } = req.body;
+app.get("/clients", function(req, res) {
+    console.log(req.query);
+    const { name } = req.query;
+    const client = data.find(cli => cli.name.includes(name));
 
-    res.json({ name, email })
+    if (!client) return res.status(204).json();
 
+    res.json(client);
 });
 
 app.put("/clients/:id", function(req, res) {
