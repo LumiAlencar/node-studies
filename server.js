@@ -16,9 +16,9 @@ app.get("/clients/:id", function(req, res) {
 });
 
 app.get("/clients", function(req, res) {
-    console.log(req.query);
-    const { name } = req.query;
-    const client = data.find(cli => cli.name.includes(name));
+    var { name } = req.query;
+    name = name.toLocaleLowerCase()
+    const client = data.find(cli => cli.name.toLowerCase().includes(name));
 
     if (!client) return res.status(204).json();
 
