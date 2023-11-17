@@ -1,12 +1,21 @@
 const express = require('express');
 const cors = require('cors')
-const app = express();
+const produtoRoutes = require('./src/produto/routes')
 const data = require('./data.json');
+const e = require('express');
 
+const app = express();
+const port = 3000;
+
+app.use("/api/v1/produtos", produtoRoutes)
 app.use(express.json())
 app.use(cors())
 
-app.get("/clients/:id", function(req, res) {
+app.get("/", (req, res) => {
+    res.send("Hello World!")
+});
+
+app.get("/clients/:id", (req, res) => {
     const { id } = req.params;
     const client = data.find(cli => cli.id == id);
 
@@ -15,7 +24,7 @@ app.get("/clients/:id", function(req, res) {
     res.json(client);
 });
 
-app.get("/clients", function(req, res) {
+app.get("/clients", (req, res) => {
     var { name } = req.query;
     const client = data.find(cli => cli.name.toLowerCase().includes(name.toLocaleLowerCase()));
 
@@ -24,7 +33,7 @@ app.get("/clients", function(req, res) {
     res.json(client);
 });
 
-app.put("/clients/:id", function(req, res) {
+app.put("/clients/:id", (req, res) => {
     const { id } = req.params;
     const client = data.find(cli => cli.id == id)
 
@@ -37,13 +46,11 @@ app.put("/clients/:id", function(req, res) {
     res.json(client)
 });
 
-app.delete("/clients/:id", function(req, res) {
+app.delete("/clients/:id", (req, res) => {
     const { id } = req.params;
     const clientsFiltered = data.filter(client => client.id === id);
 
     req.json(clientsFiltered);
 });
 
-app.listen(3000, function() {
-    console.log("Server in running...")
-});
+app.listen(port, () => { console.log(`Server in running on ${port}`) });
