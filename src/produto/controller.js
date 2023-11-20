@@ -16,7 +16,16 @@ const getProdutosById = (req, res) => {
     })
 }
 
+const getProdutosByName = (req, res) => {
+    const nome = parseInt(req.params.nome);
+    pool.query(queries.getProdutosByName, [nome], (error, results) => {
+        if (error) throw error;
+        res.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
     getProdutos,
     getProdutosById,
+    getProdutosByName,
 }
